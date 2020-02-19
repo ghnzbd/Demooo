@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>springmvcdemo2</artifactId>
+    <artifactId>springmvc-demo-app</artifactId>
     <packaging>war</packaging>
 
-    <name>springmvcdemo2 Maven Webapp</name>
+    <name>springmvc-demo-app</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
