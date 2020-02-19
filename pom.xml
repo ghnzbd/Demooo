@@ -12,6 +12,7 @@
         <module>spring-demo</module>
         <module>springboot-demo</module>
         <module>springmvc-demo-app</module>
+        <module>java-demoo</module>
     </modules>
 
 
