@@ -1,9 +1,10 @@
 package demo.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * @author CBeann
@@ -11,14 +12,17 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @ComponentScan("demo")
-public class AppConfig {
+@EnableWebMvc
+public class AppConfig extends WebMvcConfigurerAdapter {
 
-    @Bean
-    public InternalResourceViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
-        internalResourceViewResolver.setPrefix("/");
-        internalResourceViewResolver.setSuffix(".jsp");
-        return internalResourceViewResolver;
+    /**
+     * {@inheritDoc}
+     * <p>This implementation is empty.
+     *
+     * @param registry
+     */
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.jsp();
     }
-
 }
