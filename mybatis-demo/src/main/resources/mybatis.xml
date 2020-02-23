@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 引入资源文件 -->
+    <properties resource="db_mysql.properties"></properties>
+
+    <!-- 设置别名 -->
+    <typeAliases>
+    </typeAliases>
+
+    <environments default="mysqlEM">
+
+        <!--数据库连接信息，注意上面的default属性和下面的id属性一致 -->
+        <environment id="mysqlEM">
+            <transactionManager type="JDBC">
+            </transactionManager>
+
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driverClass}" />
+                <property name="url" value="${jdbc.jdbcUrl}" />
+                <property name="username" value="${jdbc.user}" />
+                <property name="password" value="${jdbc.password}" />
+
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 引入类接口的xml -->
+    <mappers>
+        <mapper resource="mapper\UserDao.xml" />
+    </mappers>
+
+
+</configuration>

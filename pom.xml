@@ -13,6 +13,7 @@
         <module>springboot-demo</module>
         <module>springmvc-demo-app</module>
         <module>java-demoo</module>
+        <module>mybatis-demo</module>
     </modules>
 
 
