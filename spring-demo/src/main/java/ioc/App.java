@@ -1,5 +1,6 @@
 package ioc;
 
+import ioc.entity.Car;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -14,8 +15,16 @@ public class App {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(App.class);
 //        Student bean = (Student)context.getBean("student");
 //        bean.speak();
-//        Car bean = (Car)context.getBean(Car.class);
+
+
+//        Student bean = (Student)context.getBean(Student.class);
 //        bean.speak();
+
+
+
+
+        Car bean = (Car)context.getBean(Car.class);
+        bean.speak();
 //        Car bean = (Car)context.getBean("carFactoryBean");
 //        bean.speak();
 
