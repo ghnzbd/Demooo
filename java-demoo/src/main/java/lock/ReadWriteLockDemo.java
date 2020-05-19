@@ -10,14 +10,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class ReadWriteLockDemo {
     public static void main(String[] args) {
 
-        ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
         readWriteLock.writeLock().lock();
-        readWriteLock.readLock().lock();
+        readWriteLock.writeLock().lock();
+//        readWriteLock.readLock().lock();
+//        readWriteLock.readLock().lock();
         System.out.println("--logic---");
-        readWriteLock.readLock().unlock();
-        readWriteLock.writeLock().lock();
-
-
+//        readWriteLock.readLock().unlock();
+//        readWriteLock.readLock().unlock();
+        readWriteLock.writeLock().unlock();
+        readWriteLock.writeLock().unlock();
 
 
     }
