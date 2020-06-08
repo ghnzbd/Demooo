@@ -8,7 +8,8 @@ public class Start {
         System.out.println("你你你");
         System.out.println("去去去去我我我");
         System.out.println("1");
-        System.out.println("1");
-        System.out.println("1");
+        System.out.println("123");
+        Start start = new Start();
+
     }
 }
