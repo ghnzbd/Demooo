@@ -14,7 +14,6 @@
         <module>springmvc-demo-app</module>
         <module>java-demoo</module>
         <module>mybatis-demo</module>
-        <module>zookeeper-demo</module>
     </modules>
 
 
