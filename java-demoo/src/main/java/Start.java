@@ -11,6 +11,7 @@ public class Start {
         System.out.println("123");
         Start start = new Start();
         System.out.println("1");
+        System.out.println("2");
 
     }
 }
