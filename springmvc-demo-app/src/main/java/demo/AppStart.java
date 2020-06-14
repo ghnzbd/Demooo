@@ -12,7 +12,7 @@ public class AppStart {
         tomcat.setPort(8081);
 
         try {
-            tomcat.addWebapp("/", "F:\\temp");
+            tomcat.addWebapp("/", "D:\\others\\temp");
             tomcat.start();
             System.out.println("tomcat start...");
             tomcat.getServer().await();

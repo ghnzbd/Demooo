@@ -16,6 +16,17 @@ public class Start {
         UserDao mapper = sqlSession.getMapper(UserDao.class);
         User user = mapper.queryById(1);
         System.out.println(user);
+
+
+         user = mapper.queryById(2);
+        System.out.println(user);
+
+        user.setUsername("temp1");
+        mapper.update(user);
+
+
+         user = mapper.queryById(2);
+        System.out.println(user);
         sqlSession.close();
     }
 }
