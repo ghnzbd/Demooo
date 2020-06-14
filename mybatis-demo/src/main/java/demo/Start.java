@@ -28,12 +28,5 @@ public class Start {
          user = mapper.queryById(2);
         System.out.println(user);
         sqlSession.close();
-
-        System.out.println("1");
-        System.out.println("1");
-        System.out.println("1");
-        System.out.println("1");
-
-
     }
 }
