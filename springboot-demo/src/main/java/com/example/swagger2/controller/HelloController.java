@@ -27,13 +27,13 @@ public class HelloController {
 
     @GetMapping("/hello2")
     public String hello2(@RequestBody Student student) {
-        return "successsuccess";
+        return "success";
     }
 
     @GetMapping("/hello3")
     @ResponseBody
     public String hello3(Student student) {
-        return "successsuccess";
+        return "success";
     }
 
     @GetMapping("/hello4")
