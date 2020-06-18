@@ -17,7 +17,7 @@ public class HelloController {
 
     @GetMapping("/hello0")
     public String hello0(String id) {
-        return "success";
+        return "successsuccess";
     }
 
     @GetMapping("/hello1")
@@ -27,30 +27,30 @@ public class HelloController {
 
     @GetMapping("/hello2")
     public String hello2(@RequestBody Student student) {
-        return "success";
+        return "successsuccess";
     }
 
     @GetMapping("/hello3")
     @ResponseBody
     public String hello3(Student student) {
-        return "success";
+        return "successsuccess";
     }
 
     @GetMapping("/hello4")
     @ResponseBody
     public String hello4(@RequestBody Student student) {
-        return "success";
+        return "successsuccess";
     }
 
     @GetMapping("/hello5")
     @ResponseBody
     public String hello5(Teacher teacher) {
-        return "success";
+        return "successsuccess";
     }
 
     @GetMapping("/hello6")
     @ResponseBody
     public String hello6(Student student) {
-        return "success";
+        return "successsuccess";
     }
 }
