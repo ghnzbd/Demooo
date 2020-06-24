@@ -2,8 +2,7 @@ package demo.controller;
 
 import demo.entity.Student;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author CBeann
@@ -18,9 +17,10 @@ public class HelloController {
         return "hello";
     }
 
-    @RequestMapping("/hello.do")
+    @GetMapping("/hello.do")
     @ResponseBody
     public String hello(String name) {
+        //request.getParameterValues(name)
         System.out.println("name:" + name);
         System.out.println("---------hello---------");
         return "hello world";
@@ -29,9 +29,20 @@ public class HelloController {
     @RequestMapping("/hello2.do")
     @ResponseBody
     public String hello2(Student student) {
+        //request.getParameterNames();,然后用反射到对象里
         System.out.println(student);
         return "hello world";
     }
+
+    @RequestMapping(value = "/hello3.do",method = RequestMethod.POST)
+    @ResponseBody
+    public String hello3(@RequestBody Student student) {
+        //首先获取inputStream变为jackjson,然后在遍历Student的属性，然后find json ，invoke
+        System.out.println(student);
+        return "hello world";
+    }
+
+
 
 
 }

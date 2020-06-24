@@ -2,10 +2,7 @@ package com.example.swagger2.controller;
 
 import com.example.swagger2.entity.Student;
 import com.example.swagger2.entity.Teacher;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author CBeann
