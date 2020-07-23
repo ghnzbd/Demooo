@@ -1,10 +1,12 @@
 package demo.init;
 
 import demo.config.AppConfig;
+import demo.filter.HelloFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 
@@ -32,8 +34,16 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
         ServletRegistration.Dynamic registration = servletCxt.addServlet("app", servlet);
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
-
         registration.setInitParameter("name", "cbeann");
+
+
+        HelloFilter helloFilter = new HelloFilter();
+        FilterRegistration.Dynamic helloFilter1 = servletCxt.addFilter("helloFilter", helloFilter);
+
+
+
+
+
 
     }
 }

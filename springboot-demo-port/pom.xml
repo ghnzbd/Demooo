@@ -46,6 +46,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.springbootdemoport.SpringbootDemoPortApplication</mainClass>
+                    <includes>
+                        <include>
+                            <!--<groupId>nothing</groupId>-->
+                            <!--<artifactId>nothing</artifactId>-->
+
+                        </include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

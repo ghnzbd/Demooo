@@ -17,6 +17,14 @@ public class StockController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @RequestMapping("/test1")
+    public String test(){
+        String str1 = "\""+"2020-1-1 09"+"\"";
+        stringRedisTemplate.opsForValue().set(str1,str1);
+        return  "success";
+    }
+
+
 
     @RequestMapping("/reduce_stock")
     public String reduceStock() {
