@@ -36,7 +36,6 @@ public class ServerDemo {
           socketChannel.register(selector, SelectionKey.OP_READ);
 
         } else if (next.isReadable()) {
-
           SocketChannel socketChannel = (SocketChannel) next.channel();
 
           // 分配指定大小缓冲区

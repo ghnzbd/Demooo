@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 /**
@@ -14,13 +17,21 @@ import java.util.Date;
 @SpringBootApplication
 @RestController
 public class DemooApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(DemooApplication.class ,args);
+  public static void main(String[] args) {
+    SpringApplication.run(DemooApplication.class, args);
+  }
+
+  @RequestMapping("/hello")
+  public String hello(HttpServletRequest servletRequest, HttpSession session) {
+    Cookie[] cookies = servletRequest.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        System.out.println(cookie.getName());
+        System.out.println(cookie.getValue());
+      }
     }
 
 
-    @RequestMapping("/hello")
-    public String hello(){
-        return "hello world"+ new Date();
-    }
+    return "hello world" + new Date();
+  }
 }
