@@ -20,16 +20,15 @@ import java.util.TimeZone;
  */
 @Configuration
 @JsonComponent
-public class JsonDateConfig {
+public class DateFormatConfig {
 
 
     @Value("${spring.jackson.date-format}")
     private String pattern;
 
     /**
-     * @author xiaofu
      * @description date 类型全局时间格式化
-     * @date 2020/8/31 18:22
+     * @date 2020-09-05 19:23
      */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilder() {
@@ -46,9 +45,8 @@ public class JsonDateConfig {
     }
 
     /**
-     * @author xiaofu
      * @description LocalDate 类型全局时间格式化
-     * @date 2020/8/31 18:22
+     * @date 2020-09-05 19:23
      */
     @Bean
     public LocalDateTimeSerializer localDateTimeDeserializer() {
