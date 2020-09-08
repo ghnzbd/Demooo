@@ -15,9 +15,9 @@ public class WordcountDriver {
 
 
         //输入路径（处理E:\temp\input下的***文件）
-        String inputPath="D:\\others\\temp\\input";
+        String inputPath="F:\\temp\\others\\temp\\input";
         //输出路径（output文件夹不能存在，否则报错）
-        String outputPath="D:\\others\\temp\\output";
+        String outputPath="F:\\temp\\others\\temp\\output";
 
         Configuration conf = new Configuration();
 
@@ -45,7 +45,7 @@ public class WordcountDriver {
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
         // 7 提交job
-        // job.submit();
+        //job.submit();
         job.waitForCompletion(true);
 
         System.out.println("-------OVER-----------");
