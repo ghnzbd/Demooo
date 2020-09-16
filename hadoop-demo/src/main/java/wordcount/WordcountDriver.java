@@ -40,7 +40,6 @@ public class WordcountDriver {
     // 5 设置最终数据输出的key和value类型
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
-
     // 6 设置输入路径和输出路径
     FileInputFormat.setInputPaths(job, new Path(inputPath));
 
