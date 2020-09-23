@@ -19,7 +19,7 @@ public class ServerDemo {
 
     serverSocketChannel.configureBlocking(false);
 
-    serverSocketChannel.bind(new InetSocketAddress(8081));
+    serverSocketChannel.bind(new InetSocketAddress(10022));
 
     Selector selector = Selector.open();
 
@@ -39,7 +39,7 @@ public class ServerDemo {
           SocketChannel socketChannel = (SocketChannel) next.channel();
 
           // 分配指定大小缓冲区
-          ByteBuffer buffer = ByteBuffer.allocate(1024);
+          ByteBuffer buffer = ByteBuffer.allocate(1024 * 5);
           int len = 0;
           while ((len = socketChannel.read(buffer)) > 0) {
 
