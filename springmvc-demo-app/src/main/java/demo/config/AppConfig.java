@@ -1,6 +1,5 @@
 package demo.config;
 
-import demo.intercepter.HelloIntercepter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -30,8 +29,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new HelloIntercepter()).addPathPatterns("/*");
-        super.addInterceptors(registry);
+//        registry.addInterceptor(new HelloIntercepter()).addPathPatterns("/*");
+//        super.addInterceptors(registry);
     }
 
 
