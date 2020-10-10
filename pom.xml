@@ -17,6 +17,7 @@
         <module>hadoop-demo</module>
         <module>springboot-hbase-demo</module>
         <module>es-demo</module>
+        <module>servlet3.0-demo</module>
 
     </modules>
 
