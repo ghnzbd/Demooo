@@ -1,5 +1,6 @@
 package com.example.demoo;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,17 @@ import java.util.Date;
 @SpringBootApplication
 @RestController
 public class DemooApplication {
+  @Value("${myname}")
+  private String name;
+
   public static void main(String[] args) {
     SpringApplication.run(DemooApplication.class, args);
+  }
+
+  @RequestMapping("/name")
+  public String name() {
+
+    return name;
   }
 
   @RequestMapping("/hello")
@@ -30,7 +40,6 @@ public class DemooApplication {
         System.out.println(cookie.getValue());
       }
     }
-
 
     return "hello world" + new Date();
   }
