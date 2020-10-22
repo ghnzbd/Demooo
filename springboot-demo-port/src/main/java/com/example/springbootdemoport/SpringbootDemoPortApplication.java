@@ -20,6 +20,11 @@ public class SpringbootDemoPortApplication {
   @Value("${server.port}")
   private String port;
 
+  @GetMapping("/index")
+  public String index() {
+    return "port:" + port + "    " + LocalDateTime.now().toString();
+  }
+
   @GetMapping("/hello")
   public String hello() {
     LocalDateTime now = LocalDateTime.now();
