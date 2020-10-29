@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -22,7 +23,10 @@ public class SpringbootDemoPortApplication {
 
   @GetMapping("/index")
   public String index() {
-    return "port:" + port + "    " + LocalDateTime.now().toString();
+    InetAddress address = InetAddress.getLoopbackAddress();
+    return "port:" + port + "    " + "\n"
+            + "ip:"+address+"\n"+
+            "time:"+LocalDateTime.now().toString();
   }
 
   @GetMapping("/hello")
