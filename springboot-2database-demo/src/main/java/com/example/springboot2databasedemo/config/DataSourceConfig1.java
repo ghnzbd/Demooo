@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @MapperScan(
-    basePackages = "com.example.springboot2databasedemo.dao.db1",
+    basePackages = "com.example.springboot2databasedemo.dao.db1", // 扫描的dao包
     sqlSessionFactoryRef = "db1SqlSessionFactory")
 public class DataSourceConfig1 {
 
@@ -39,7 +39,7 @@ public class DataSourceConfig1 {
     bean.setDataSource(dataSource);
     // mapper的xml形式文件位置必须要配置，不然将报错：no statement （这种错误也可能是mapper的xml中，namespace与项目的路径不一致导致）
     bean.setMapperLocations(
-        new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/db1/*.xml"));
+        new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/db1/*.xml"));//// 扫描的daoXML包
     return bean.getObject();
   }
 
