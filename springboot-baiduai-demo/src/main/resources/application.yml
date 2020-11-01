@@ -4,9 +4,9 @@ server:
 
 baidu:
   ai:
-    APP_ID: 22897962
-    API_KEY: ANcBwskpyRfNRyfE9FxhE0ns
-    SECRET_KEY: EV4o9EdUC8bxYe0wmzoc0aZXACLU03DW
+    APP_ID: 228979629
+    API_KEY: ANcBwskpyRfNRyfE9FxhE0nsq
+    SECRET_KEY: EV4o9EdUC8bxYe0wmzoc0aZXACLU03DWt
 
 logging:
   config: classpath:logback-spring.xml
