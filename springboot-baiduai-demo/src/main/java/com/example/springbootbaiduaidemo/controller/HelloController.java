@@ -17,7 +17,7 @@ public class HelloController {
   @GetMapping("/hello")
   public Object hello() {
 
-    Object o = baiduAiUtils.animalDetect("C:\\Users\\25682\\Desktop\\timg.jpg");
+    Object o = baiduAiUtils.animalDetect("C:\\Users\\25682\\Desktop\\1.jpg");
 
 
     return o.toString();
