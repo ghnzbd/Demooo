@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: springboot-swagger3-demo
+server:
+  port: 8080
+
+
+
+
+
