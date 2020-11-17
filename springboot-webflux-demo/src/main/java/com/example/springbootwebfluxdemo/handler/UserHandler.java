@@ -39,7 +39,7 @@ public class UserHandler {
 
 
   //查询所有
-  public Mono<ServerResponse> getAllUser(){
+  public Mono<ServerResponse> getAllUser(ServerRequest request){
     // 空值处理
     Mono<ServerResponse> noFound = ServerResponse.notFound().build();
 

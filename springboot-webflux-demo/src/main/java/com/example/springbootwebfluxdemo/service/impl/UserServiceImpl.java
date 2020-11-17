@@ -26,8 +26,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Mono<User> getUserById(Integer id) {
+    System.out.println("--------------------------");
+    User user = users.get(id);
 
-    return Mono.just(users.get(id));
+    return Mono.just(user);
   }
 
   @Override
