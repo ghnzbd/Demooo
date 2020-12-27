@@ -117,7 +117,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定启动类 -->
-                    <mainClass>com.example.demoo.DemooApplication</mainClass>
+                    <mainClass>com.example.runListenerDemo.DemooApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
