@@ -34,4 +34,8 @@ public class A implements ApplicationContextAware {
     System.out.println("'----------A------setApplicationContext---------------");
     this.applicationContext = applicationContext;
   }
+
+  public ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
 }

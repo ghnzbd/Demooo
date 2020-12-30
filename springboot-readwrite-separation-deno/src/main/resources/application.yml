@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    master:
+      jdbc-url: jdbc:mysql://localhsot:3306/readwritedemo
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+    slave:
+      jdbc-url: jdbc:mysql://localhsot:3307/readwritedemo
+      username: root   # \u53EA\u8BFB\u8D26\u6237
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+

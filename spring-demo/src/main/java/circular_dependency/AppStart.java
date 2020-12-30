@@ -1,6 +1,7 @@
 package circular_dependency;
 
 import circular_dependency.entity.A;
+import circular_dependency.entity.B;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -11,15 +12,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class AppStart {
   public static void main(String[] args) {
     ApplicationContext context = new ClassPathXmlApplicationContext("circulardependency.xml");
-    //        A a = (A) context.getBean("a");
-    //        a.speak();
-    //        a.getB().getA().speak();
     A a = (A) context.getBean("a");
-    //        B b=(B) context.getBean("b");
-    //        C c=(C) context.getBean("c");
-      a.getB().speak();
+    B b = (B) context.getBean("b");
+
     a.speak();
-    //        b.speak();
-    //        c.speak();
+
+
+    System.out.println(a);
   }
 }
