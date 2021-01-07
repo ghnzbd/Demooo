@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: admin-client
+  boot:
+    admin:
+      url: http://127.0.0.1:8008
+      client:
+        prefer-ip: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  context-path: /*
+  security:
+    enabled: false
+
+
+

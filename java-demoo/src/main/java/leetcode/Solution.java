@@ -1,118 +1,47 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+class Solution {
 
-public class Solution {
-  /**
-   * lru design
-   *
-   * @param operators int整型二维数组 the ops
-   * @param k int整型 the k
-   * @return int整型一维数组
-   */
-  public int[] LRU(int[][] operators, int k) {
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.longestPalindrome("cbbd"));
+  }
 
-    List<Integer> list = new ArrayList<>();
-    LRUCache lruCache = new LRUCache(k);
+  // 22.07
+  public String longestPalindrome(String s) {
 
-    int length = operators.length;
-    for (int i = 0; i < length; i++) {
-      if (operators[i][0] == 1) {
-        lruCache.put(operators[i][1], operators[i][2]);
-      } else {
-        list.add(lruCache.get(operators[i][1]));
+    String res = "";
+
+    for (int i = 0; i < s.length(); i++) {
+      String val = doLongestPalindrome(i, i, s);
+      if (val != null && res.length() < val.length()) {
+        res = val;
       }
     }
 
-    int[] res = new int[list.size()];
-    for (int i = 0; i < list.size(); i++) {
-
-      res[i] = list.get(i);
+    for (int i = 0; i < s.length() - 1; i++) {
+      String val = doLongestPalindrome(i, i + 1, s);
+      if (val != null && res.length() < val.length()) {
+        res = val;
+      }
     }
 
     return res;
   }
-}
 
-class LRUCache {
+  private String doLongestPalindrome(int left, int right, String s) {
 
-  int capacity;
-
-  private HashMap<Integer, Node> cache = new HashMap<>();
-
-  private Node head;
-  private Node tail;
-
-  // 新数据插入头
-  public LRUCache(int capacity) {
-
-    this.capacity = capacity;
-    head = new Node();
-    tail = new Node();
-    head.next = tail;
-    tail.prev = head;
-  }
-
-  public int get(int key) {
-
-    Node node = cache.get(key);
-    if (null == node) {
-      return -1;
-    }
-    put(key, node.value);
-    return node.value;
-  }
-
-  public void put(int key, int value) {
-
-    Node node = cache.get(key);
-
-    if (null != node) {
-
-      // 移除当前节点
-      node.next.prev = node.prev;
-      node.prev.next = node.next;
-
-      node.value = value;
-
-      head.next.prev = node;
-      node.next = head.next;
-      node.prev = head;
-      head.next = node;
-
-    } else {
-
-      // 长了
-      if (cache.size() >= capacity) {
-        Node del = tail.prev;
-        del.prev.next = tail;
-        tail.prev = del.prev;
-        cache.remove(del.key);
-        del = null;
-      }
-
-      Node newNode = new Node(key, value);
-      head.next.prev = newNode;
-      newNode.next = head.next;
-      newNode.prev = head;
-      head.next = newNode;
-      cache.put(key, newNode);
-    }
-  }
-
-  class Node {
-    public Node(Integer key, Integer value) {
-      this.key = key;
-      this.value = value;
+    if (s.charAt(left) != s.charAt(right)) {
+      return null;
     }
 
-    public Node() {}
+    while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+      left--;
+      right++;
+    }
 
-    Integer key;
-    Integer value;
-    Node next = null;
-    Node prev = null;
+    left++;
+    right--;
+    return s.substring(left, right + 1);
   }
 }
