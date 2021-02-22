@@ -1,11 +1,15 @@
 package com.example.demo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author chaird
@@ -18,9 +22,25 @@ public class App {
     SpringApplication.run(App.class, args);
   }
 
-  @RequestMapping("/hello")
-  public String name() {
-
-    return LocalDateTime.now().toString();
+  @GetMapping("/getAll")
+  public Object getAll() {
+    List<Stduent> stduents = new ArrayList<>();
+    stduents.add(new Stduent("zhangsan", 1));
+    stduents.add(new Stduent("zhangsan1", 11));
+    return stduents;
   }
+
+  @GetMapping("/get/{id}")
+  public Object getOne(@PathVariable Integer id) {
+    return new Stduent("zhangsan", id);
+  }
+}
+
+@Data
+@AllArgsConstructor
+class Stduent {
+
+  private String name;
+
+  private int age;
 }

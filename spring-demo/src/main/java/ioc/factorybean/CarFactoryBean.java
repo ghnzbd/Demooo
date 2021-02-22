@@ -25,4 +25,7 @@ public class CarFactoryBean implements FactoryBean<Car> {
     public boolean isSingleton() {
         return true;
     }
+
+    public CarFactoryBean() {
+    }
 }

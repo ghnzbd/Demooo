@@ -1,6 +1,6 @@
 package ioc;
 
-import ioc.entity.Student;
+import ioc.entity.CarGroup;
 import ioc.select.MySelector;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,18 +16,19 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(App.class);
-    Student bean = (Student) context.getBean("student");
+//    Student bean = (Student) context.getBean("student");
+//    bean.speak();
+//    Object o = bean.getapplicationContext();
+
+
+            //Student bean = (Student)context.getBean(Student.class);
+      CarGroup bean = (CarGroup)context.getBean("carGroup");
     bean.speak();
-    Object o = bean.getapplicationContext();
 
-
-    //        Student bean = (Student)context.getBean(Student.class);
-    //        bean.speak();
-
-    //        Car bean = (Car)context.getBean(Car.class);
-    //        bean.speak();
-    //        Car bean = (Car)context.getBean("carFactoryBean");
-    //        bean.speak();
+            //Car bean = (Car)context.getBean(Car.class);
+            //bean.speak();
+//            Car bean = (Car)context.getBean("carFactoryBean");
+//            bean.speak();
 
     //        Teacher teacher = context.getBean(Teacher.class);
     //        teacher.spark();
