@@ -5,10 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.MyStudentService;
 
-/**
- * @author chairongdian <chaidongdian@kuaishou.com>
- * Created on 2021-03-10
- */
+
 @RestController
 public class MyStudentController {
 

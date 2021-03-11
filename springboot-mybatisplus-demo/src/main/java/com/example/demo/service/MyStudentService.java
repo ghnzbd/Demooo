@@ -1,9 +1,5 @@
 package com.example.demo.service;
 
-/**
- * @author chairongdian <chaidongdian@kuaishou.com>
- * Created on 2021-03-10
- */
 
 import org.springframework.stereotype.Service;
 
