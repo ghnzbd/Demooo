@@ -1,6 +1,6 @@
 package ioc;
 
-import ioc.entity.CarGroup;
+import ioc.autoward.Aa;
 import ioc.select.MySelector;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,10 +20,12 @@ public class App {
 //    bean.speak();
 //    Object o = bean.getapplicationContext();
 
+    Aa bean = (Aa)context.getBean("aa");
+    bean.speak();
 
             //Student bean = (Student)context.getBean(Student.class);
-      CarGroup bean = (CarGroup)context.getBean("carGroup");
-    bean.speak();
+//      CarGroup bean = (CarGroup)context.getBean("carGroup");
+//    bean.speak();
 
             //Car bean = (Car)context.getBean(Car.class);
             //bean.speak();
@@ -34,5 +36,6 @@ public class App {
     //        teacher.spark();
 
     System.out.println("--OVER--");
+    context.close();
   }
 }

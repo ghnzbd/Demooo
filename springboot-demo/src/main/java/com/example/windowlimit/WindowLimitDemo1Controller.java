@@ -1,189 +1,169 @@
 package com.example.windowlimit;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class WindowLimitDemo1Controller {
 
+  private static final String USER_PREFIX = "user:";
 
-    private static final String USER_PREFIX = "user:";
+  private static final Integer LIMIT_NUM = 3;
 
-    private static final Integer LIMIT_NUM = 3;
+  // 1小时的毫秒数
+  private static final Integer PERIOD = 1 * 60 * 60 * 1000;
+  // 1分钟
+  private static final Integer PERIOD_WINDOW = 10 * 1000;
 
-    //1小时的毫秒数
-    private static final Integer PERIOD = 1 * 60 * 60 * 1000;
-    //1分钟
-    private static final Integer PERIOD_WINDOW = 10 * 1000;
+  @Autowired private StringRedisTemplate stringRedisTemplate;
 
+  @Autowired private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+  /** 场景一：1:59分发3条，2:01分发3条成立 线程不安全 */
+  @GetMapping("/emailLimit")
+  public Object emailLimit(String userName) {
 
+    userName = "zhangsan";
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    DateFormat dateTimeInstance = DateFormat.getDateInstance();
+    Date date = new Date();
+    String format = dateTimeInstance.format(date);
 
+    // 拼接字符串
+    String key = USER_PREFIX + format + userName;
 
-    /**
-     * 场景一：1:59分发3条，2:01分发3条成立
-     * 线程不安全
-     */
-    @GetMapping("/emailLimit")
-    public Object emailLimit(String userName) {
+    String s = stringRedisTemplate.opsForValue().get(key);
 
+    Integer num = 0;
 
-        userName = "zhangsan";
-
-        DateFormat dateTimeInstance = DateFormat.getDateInstance();
-        Date date = new Date();
-        String format = dateTimeInstance.format(date);
-
-        //拼接字符串
-        String key = USER_PREFIX + format + userName;
-
-        String s = stringRedisTemplate.opsForValue().get(key);
-
-
-        Integer num = 0;
-
-        if (null != s) {
-            num = Integer.parseInt(s);
-        }
-
-
-        if (num < LIMIT_NUM) {
-            System.out.println("发送短信");
-            //设置超时
-            stringRedisTemplate.opsForValue().set(key, String.valueOf(num + 1), 1, TimeUnit.HOURS);
-            return 1;
-        } else {
-            return 0;
-        }
-
-
+    if (null != s) {
+      num = Integer.parseInt(s);
     }
 
+    if (num < LIMIT_NUM) {
+      System.out.println("发送短信");
+      // 设置超时
+      stringRedisTemplate.opsForValue().set(key, String.valueOf(num + 1), 1, TimeUnit.HOURS);
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
-    /**
-     * 线程安全
-     */
-    @GetMapping("/emailLimitV2")
-    public Object emailLimitV2(String userName) {
+  /** 线程安全 */
+  @GetMapping("/emailLimitV2")
+  public Object emailLimitV2(String userName) {
 
+    userName = "zhangsan";
 
-        userName = "zhangsan";
+    DateFormat dateTimeInstance = DateFormat.getDateInstance();
+    Date date = new Date();
+    String format = dateTimeInstance.format(date);
 
-        DateFormat dateTimeInstance = DateFormat.getDateInstance();
-        Date date = new Date();
-        String format = dateTimeInstance.format(date);
+    // 拼接字符串
+    String key = USER_PREFIX + format + userName;
 
-        //拼接字符串
-        String key = USER_PREFIX + format + userName;
+    // 给key+1，因为redis是单线程的，所以redis那边是线程安全的，这边把结果获取并判断是否大于阈值，也是线程安全的
+    Long num = stringRedisTemplate.opsForValue().increment(key, 1);
+    // 设置过期时间 一天
+    stringRedisTemplate.expire(key, 1 * 24 * 60 * 60 * 1000, TimeUnit.MILLISECONDS);
 
-        //给key+1，因为redis是单线程的，所以redis那边是线程安全的，这边把结果获取并判断是否大于阈值，也是线程安全的
-        Long num = stringRedisTemplate.opsForValue().increment(key, 1);
-        //设置过期时间 一天
-        stringRedisTemplate.expire(key, 1 * 24 * 60 * 60 * 1000, TimeUnit.MILLISECONDS);
+    if (num < LIMIT_NUM) {
+      System.out.println("发送短信");
+      // 设置超时
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
+  /** 1:59分发3条，2:01分发3条不成立，因为在1:50到2:10这个窗口时间段里发送了6条 下面按照1分钟3条写demo 线不与安全 */
+  @GetMapping("/emailWindowLimit")
+  public Object emailWindowLimit(String userName) {
 
-        if (num < LIMIT_NUM) {
-            System.out.println("发送短信");
-            //设置超时
-            return 1;
-        } else {
-            return 0;
-        }
+    userName = "lisi";
+    // 拼接字符串
+    String key = USER_PREFIX + userName;
+    long current = System.currentTimeMillis();
 
+    // 移除时间窗口之前的行为记录，剩下的都是时间窗口内的
+    redisTemplate.opsForZSet().removeRangeByScore(key, 0, current - PERIOD_WINDOW);
+    // 获取窗口内的行为数量
+    Long zCard = redisTemplate.opsForZSet().zCard(key);
 
+    if (zCard < LIMIT_NUM) {
+      System.out.println("send email");
+
+      // 记录行为
+      redisTemplate.opsForZSet().add(key, current, current);
+      // 设置zset过期时间，避免冷用户持续占用内存
+      // 过期时间应该等于时间窗口长度，再多宽限1s
+      redisTemplate.expire(key, PERIOD_WINDOW + 1, TimeUnit.MILLISECONDS);
+      return 1;
     }
 
+    return 0;
+  }
 
-    /**
-     * 1:59分发3条，2:01分发3条不成立，因为在1:50到2:10这个窗口时间段里发送了6条
-     * 下面按照1分钟3条写demo
-     * 线不与安全
-     */
-    @GetMapping("/emailWindowLimit")
-    public Object emailWindowLimit(String userName) {
+  /** 1:59分发3条，2:01分发3条不成立，因为在1:50到2:10这个窗口时间段里发送了6条 下面按照1分钟3条写demo 线不与安全 */
+  @GetMapping("/emailWindowLimitV2")
+  @Deprecated
+  public Object emailWindowLimitV2(String userName) {
 
+    userName = "zhangsan";
+    // 拼接字符串
+    String key = USER_PREFIX + userName;
+    long current = System.currentTimeMillis();
 
-        userName = "lisi";
-        //拼接字符串
-        String key = USER_PREFIX + userName;
-        long current = System.currentTimeMillis();
+    // 执行一个lua脚本
+    String scriptLua = "";
 
-        // 移除时间窗口之前的行为记录，剩下的都是时间窗口内的
-        redisTemplate.opsForZSet().removeRangeByScore(key, 0, current - PERIOD_WINDOW);
-        // 获取窗口内的行为数量
-        Long zCard = redisTemplate.opsForZSet().zCard(key);
+    DefaultRedisScript<Integer> defaultRedisScript = new DefaultRedisScript<>();
+    defaultRedisScript.setResultType(Integer.class);
+    defaultRedisScript.setScriptText("");
+    // defaultRedisScript.setScriptSource(new ResourceScriptSource(new
+    // ClassPathResource("redis/demo.lua")));
 
-        if (zCard < LIMIT_NUM) {
-            System.out.println("send email");
-
-
-            // 记录行为
-            redisTemplate.opsForZSet().add(key, current, current);
-            // 设置zset过期时间，避免冷用户持续占用内存
-            // 过期时间应该等于时间窗口长度，再多宽限1s
-            redisTemplate.expire(key, PERIOD_WINDOW + 1, TimeUnit.MILLISECONDS);
-            return 1;
-        }
-
-
-        return 0;
+    List<String> keys = new ArrayList<>();
+    keys.add(key);
+    Object[] args = new Object[2];
+    args[0] = 0;
+    args[1] = current - PERIOD_WINDOW;
+    args[2] = LIMIT_NUM;
+    args[3] = current;
+    args[4] = current;
 
 
-    }
 
-    /**
-     * 1:59分发3条，2:01分发3条不成立，因为在1:50到2:10这个窗口时间段里发送了6条
-     * 下面按照1分钟3条写demo
-     * 线不与安全
-     */
-    @GetMapping("/emailWindowLimitV2")
-    @Deprecated
-    public Object emailWindowLimitV2(String userName) {
+    Integer execute = redisTemplate.execute(defaultRedisScript, keys, args);
 
+    return execute;
+  }
 
-        userName = "lisi";
-        //拼接字符串
-        String key = USER_PREFIX + userName;
-        long current = System.currentTimeMillis();
+  @GetMapping("/scriptOK")
+  public Object execscript() {
 
-        //执行一个lua脚本
-        String scriptLua = "";
+    String script = "local zSetLen = redis.call(\"zcard\", KEYS[1])";
 
+    DefaultRedisScript<Object> defaultRedisScript = new DefaultRedisScript<>();
+    defaultRedisScript.setResultType(Object.class);
+    defaultRedisScript.setScriptText(script);
+    List keys = new ArrayList();
+    keys.add("zhangsan");
+    String[] args = new String[1];
+    args[0] = "2";
+    Object execute = redisTemplate.execute(defaultRedisScript, keys, args);
 
-        // 移除时间窗口之前的行为记录，剩下的都是时间窗口内的
-        redisTemplate.opsForZSet().removeRangeByScore(key, 0, current - PERIOD_WINDOW);
-        // 获取窗口内的行为数量
-        Long zCard = redisTemplate.opsForZSet().zCard(key);
-
-        if (zCard < LIMIT_NUM) {
-            System.out.println("send email");
-            // 记录行为
-            Boolean add = redisTemplate.opsForZSet().add(key, current, current);
-            // 设置zset过期时间，避免冷用户持续占用内存
-            // 过期时间应该等于时间窗口长度，再多宽限1s
-            redisTemplate.expire(key, PERIOD_WINDOW + 1, TimeUnit.MILLISECONDS);
-            return 1;
-        }
-        return 0;
-
-    }
-
-    @GetMapping("/")
-    public Object execscript(){
-        return -1;
-
-    }
+    return execute;
+  }
 }

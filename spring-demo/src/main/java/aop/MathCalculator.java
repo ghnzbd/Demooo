@@ -6,11 +6,14 @@ package aop;
  */
 public class MathCalculator {
 
+  public int addMethod(int a, int b) {
+      //System.out.println("MathCalculator.....addMethod....");
+      //return a + b;
+    return addMethodP(a, b);
+  }
 
-
-
-    public int addMethod(int a,int b){
-        System.out.println("MathCalculator.....addMethod....");
-        return a + b;
-    }
+  private int addMethodP(int a, int b) {
+    System.out.println("MathCalculator.....addMethod....");
+    return a + b;
+  }
 }
