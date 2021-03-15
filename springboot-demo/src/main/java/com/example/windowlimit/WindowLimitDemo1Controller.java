@@ -2,7 +2,6 @@ package com.example.windowlimit;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,12 +117,8 @@ public class WindowLimitDemo1Controller {
 
 
         userName = "lisi";
-
-
         //拼接字符串
         String key = USER_PREFIX + userName;
-
-
         long current = System.currentTimeMillis();
 
         // 移除时间窗口之前的行为记录，剩下的都是时间窗口内的
@@ -160,41 +155,35 @@ public class WindowLimitDemo1Controller {
 
 
         userName = "lisi";
-
-
         //拼接字符串
         String key = USER_PREFIX + userName;
-
-
         long current = System.currentTimeMillis();
 
-        //开启事务
-        redisTemplate.multi();
+        //执行一个lua脚本
+        String scriptLua = "";
+
+
         // 移除时间窗口之前的行为记录，剩下的都是时间窗口内的
         redisTemplate.opsForZSet().removeRangeByScore(key, 0, current - PERIOD_WINDOW);
         // 获取窗口内的行为数量
         Long zCard = redisTemplate.opsForZSet().zCard(key);
-        List<Object> exec = redisTemplate.exec();
-
-
-
-
 
         if (zCard < LIMIT_NUM) {
             System.out.println("send email");
-
-
             // 记录行为
-            redisTemplate.opsForZSet().add(key, current, current);
+            Boolean add = redisTemplate.opsForZSet().add(key, current, current);
             // 设置zset过期时间，避免冷用户持续占用内存
             // 过期时间应该等于时间窗口长度，再多宽限1s
             redisTemplate.expire(key, PERIOD_WINDOW + 1, TimeUnit.MILLISECONDS);
             return 1;
         }
-
-
         return 0;
 
+    }
+
+    @GetMapping("/")
+    public Object execscript(){
+        return -1;
 
     }
 }
