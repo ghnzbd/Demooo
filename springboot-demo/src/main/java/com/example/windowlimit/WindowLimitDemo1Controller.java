@@ -1,17 +1,17 @@
 package com.example.windowlimit;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class WindowLimitDemo1Controller {
@@ -23,7 +23,7 @@ public class WindowLimitDemo1Controller {
   // 1小时的毫秒数
   private static final Integer PERIOD = 1 * 60 * 60 * 1000;
   // 1分钟
-  private static final Integer PERIOD_WINDOW = 10 * 1000;
+  private static final Integer PERIOD_WINDOW = 60 * 1000;
 
   @Autowired private StringRedisTemplate stringRedisTemplate;
 
@@ -107,7 +107,7 @@ public class WindowLimitDemo1Controller {
       // 记录行为
       redisTemplate.opsForZSet().add(key, current, current);
       // 设置zset过期时间，避免冷用户持续占用内存
-      // 过期时间应该等于时间窗口长度，再多宽限1s
+      // 过期时间应该等于时间窗口长度，再多宽限1单位，此处是1毫秒，其实多一秒也行
       redisTemplate.expire(key, PERIOD_WINDOW + 1, TimeUnit.MILLISECONDS);
       return 1;
     }
@@ -122,30 +122,47 @@ public class WindowLimitDemo1Controller {
 
     userName = "zhangsan";
     // 拼接字符串
-    String key = USER_PREFIX + userName;
+    String key = userName;
+    //获取当前的时间
     long current = System.currentTimeMillis();
 
     // 执行一个lua脚本
     String scriptLua = "";
 
-    DefaultRedisScript<Integer> defaultRedisScript = new DefaultRedisScript<>();
-    defaultRedisScript.setResultType(Integer.class);
-    defaultRedisScript.setScriptText("");
+    DefaultRedisScript<Object> defaultRedisScript = new DefaultRedisScript<>();
+    defaultRedisScript.setResultType(Object.class);
+    defaultRedisScript.setScriptText("--根据score删除数据\n"
+            + "redis.call(\"zremrangebyscore\",KEYS[1],ARGV[1],ARGV[2])\n"
+            + "\n"
+            + "--获取个数\n"
+            + "local zSetLen = redis.call(\"zcard\", KEYS[1])\n"
+            + "\n"
+            + "\n"
+            + "\n"
+            + "if tonumber(zSetLen) > tonumber(ARGV[4]) then\n"
+            + "    return 0\n"
+            + "end\n"
+            + "--zadd添加数据\n"
+            + "local res = redis.call(\"zadd\",KEYS[1], ARGV[5], ARGV[6])\n"
+            + "redis.call(\"expire\",KEYS[1],ARGV[3])\n"
+            + "return res\n"
+            + "\n"
+            + "\n");
     // defaultRedisScript.setScriptSource(new ResourceScriptSource(new
     // ClassPathResource("redis/demo.lua")));
 
     List<String> keys = new ArrayList<>();
     keys.add(key);
-    Object[] args = new Object[2];
-    args[0] = 0;
-    args[1] = current - PERIOD_WINDOW;
-    args[2] = LIMIT_NUM;
-    args[3] = current;
-    args[4] = current;
+    Object[] args = new Object[6];
+    args[0] = 0;//删除的窗口开始
+    args[1] = current-PERIOD_WINDOW;//删除的窗口结束
+    args[2] = 60;//设置key的过期时间
+    args[3] = LIMIT_NUM;//设置limit
+    args[4] = new Date().getTime();//zadd 的元组
+    args[5] = new Date().getTime();//zadd 的元组
 
-
-
-    Integer execute = redisTemplate.execute(defaultRedisScript, keys, args);
+    Object execute = redisTemplate.execute(defaultRedisScript, keys, args);
+    System.out.println(execute);
 
     return execute;
   }
