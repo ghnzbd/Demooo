@@ -1,5 +1,6 @@
-package com.example;
+package com.example.config;
 
+import com.example.Interceptor.RateLimiterInceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

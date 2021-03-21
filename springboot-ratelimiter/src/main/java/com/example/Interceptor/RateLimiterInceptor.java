@@ -1,5 +1,6 @@
-package com.example;
+package com.example.Interceptor;
 
+import com.example.annotation.ExtRateLimiter;
 import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
