@@ -40,6 +40,7 @@ public class RateLimiterInceptor extends HandlerInterceptorAdapter {
     if (methodAnn) {
       // 获取注解
       ExtRateLimiter extRateLimiter = method.getDeclaredAnnotation(ExtRateLimiter.class);
+      //获取注解属性
       double permitsPerSecond = extRateLimiter.permitsPerSecond();
       long timeout = extRateLimiter.timeout();
 
