@@ -432,6 +432,8 @@ public class App {
 
         System.out.println("---");
         System.out.println(getMap(taskParmKVDTO));
+        System.out.println("---");
+        System.out.println(JSONUtil.toJsonStr(getMap(taskParmKVDTO)));
 
 
     }
@@ -451,6 +453,29 @@ public class App {
 
 
     }
+
+    public  static Map<String, Map> getMap(List<TaskParmKVDTO> taskParmKVDTO){
+
+        if (null == taskParmKVDTO){
+            return null;
+
+        }
+
+        Map<String, Map> map = new HashMap<>();
+
+
+        for (TaskParmKVDTO parmKVDTO : taskParmKVDTO) {
+
+
+            map.put(parmKVDTO.getParmKey(),getMap(parmKVDTO.getChildNodeList()));
+
+        }
+
+        return map;
+
+
+    }
+
 
     public  static Map<String, Map> getMap(List<TaskParmKVDTO> taskParmKVDTO){
 
