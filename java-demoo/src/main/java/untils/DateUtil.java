@@ -1,8 +1,6 @@
 package untils;
 
 
-import org.apache.commons.lang.StringUtils;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -123,9 +121,9 @@ public class DateUtil {
    */
   public static Date formatToDate(String date, String format) {
     try {
-      if (StringUtils.isBlank(date)) {
-        return null;
-      }
+//      if (StringUtils.isBlank(date)) {
+//        return null;
+//      }
 
       SimpleDateFormat sorceFmt = new SimpleDateFormat(format);
       return new Date(sorceFmt.parse(date).getTime());
@@ -239,9 +237,9 @@ public class DateUtil {
 
   /** 获得形如1Y2M3D字符串代表的时间间隔，天数 如果输入只是一个整数则代表天数 */
   public static long getDays(String intervalString) {
-    if (StringUtils.isBlank(intervalString)) {
-      return -1;
-    }
+//    if (StringUtils.isBlank(intervalString)) {
+//      return -1;
+//    }
     if (!Pattern.compile(
             "^(\\d+(Y|y)?)?(\\d+(M|m)?)?(\\d+(D|d)?)$|^(\\d+(Y|y)?)?(\\d+(M|m)?)$|^(\\d+(Y|y)?)$")
         .matcher(intervalString)
