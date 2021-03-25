@@ -430,18 +430,46 @@ public class App {
         System.out.println(taskParmKVDTO);
 
 
+        System.out.println("---");
+        System.out.println(getMap(taskParmKVDTO));
+
+
     }
 
-    public Map<Long, Map> getMap(TaskParmKVDTO taskParmKVDTO){
+    public static Map<String, Map> getMap(TaskParmKVDTO taskParmKVDTO){
 
         if (null == taskParmKVDTO){
             return null;
 
         }
 
-        Map<Long, Map> map = new HashMap<>();
+        Map<String, Map> map = new HashMap<>();
 
-        map.put(taskParmKVDTO.getParmKey(),);
+        map.put(taskParmKVDTO.getParmKey(),getMap(taskParmKVDTO.getChildNodeList()));
+
+        return map;
+
+
+    }
+
+    public  static Map<String, Map> getMap(List<TaskParmKVDTO> taskParmKVDTO){
+
+        if (null == taskParmKVDTO){
+            return null;
+
+        }
+
+        Map<String, Map> map = new HashMap<>();
+
+
+        for (TaskParmKVDTO parmKVDTO : taskParmKVDTO) {
+
+
+            map.put(parmKVDTO.getParmKey(),getMap(parmKVDTO.getChildNodeList()));
+
+        }
+
+        return map;
 
 
     }
